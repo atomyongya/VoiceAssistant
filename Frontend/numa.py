@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 # Declearing window of the application
 window = Tk()
@@ -21,10 +21,10 @@ entryBox.place(relx=0.5, rely=0.3, width=400, height=40, anchor=CENTER)
 # Creating canvas for microphone 
 canvas = Canvas(window, width=80, height=140)
 canvas.configure(background='Purple')
-img = Image.open("./image/microphone2.png")
-resized = img.resize((80, 140), Image.ANTIALIAS)
-img2 = ImageTk.PhotoImage(resized)
-canvas.create_image(0, 0, anchor=NW, image=img2)
+# img = Image.open("./image/microphone2.png")
+# resized = img.resize((80, 140), Image.ANTIALIAS)
+# img2 = ImageTk.PhotoImage(resized)
+# canvas.create_image(0, 0, anchor=NW, image=img2)
 canvas.place(relx=0.5, rely=0.55,  anchor=CENTER)
 
 # Shoving it onto the Screen

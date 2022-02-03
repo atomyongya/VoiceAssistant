@@ -1,0 +1,105 @@
+#!/usr/bin/python3
+
+import speech_recognition as sr
+import pyttsx3
+import pywhatkit
+import datetime
+import wikipedia
+
+# inbuilt function 
+import Open_App
+import Close_App
+import Terminal_Command
+
+# Recognize the user command
+listener = sr.Recognizer() 
+
+# AI voice to speak with user
+ai_Engine = pyttsx3.init()
+ai_Engine.setProperty("rate", 155) # Controlling the Speed of ai_Voice
+
+# ai_Voice = ai_Engine.getProperty("voices")   
+# ai_Engine.setProperty("voice", ai_Voice[1].id)
+
+# Response is given to the user each time some process happen
+def Response_Voice(text_Command):
+    ai_Engine.say(text_Command)
+    ai_Engine.runAndWait()
+
+def Receive_Command():
+    try:
+        with sr.Microphone() as user_Command_Source:   # {with} Terminate the exception with out any error
+            # Alert message when numa application is ready 
+            print("Listening...")
+            # Response_Voice("numa")
+            
+            # Listen to the user voice from microphone using user_Command_Source
+            user_Voice_Command = listener.listen(user_Command_Source)
+            
+            # Google will translate the user_Voice_Command which is audio into text
+            final_Command = listener.recognize_google(user_Voice_Command)
+
+            # converting to final_Command to lower case
+            final_Command = final_Command.lower()
+            
+            # To detect the word Numa 
+            if 'google' in final_Command: # if "numa" word found in command
+                final_Command = final_Command.replace('google', '')
+                print(final_Command)
+            else:                       # if "numa" word doesn't found in command
+                exit()
+            
+    except Exception as error:
+        print("Exception: " + error)
+        
+    return final_Command
+
+# Main Function that get execuated while user give command 
+def numa_System_Run():
+    user_Command = Receive_Command()
+    print(user_Command)
+    
+    # To open the application in system
+    if "open" in user_Command:        
+        application_Name = user_Command.replace("open", "")
+        Response_Voice("Opeaning " + application_Name)
+        Open_App.open_Application(application_Name)
+        
+    # To Close the application in system
+    elif "close" in user_Command:
+        application_Name = user_Command.replace("close", "")
+        Response_Voice("Closing " + application_Name)
+        Close_App.close_Application(application_Name)
+    
+    # Play the music online or offline 
+    elif 'play' in user_Command:
+        song = user_Command.replace('play', '')
+        Response_Voice('playing ' + song)
+        print(song)
+        # pywhatkit.playonyt(song)
+        
+    # To get the time 
+    elif 'time' in user_Command:
+        time = datetime.datetime.now().strftime('%I:%M %p')
+        print(time)
+        Response_Voice("Current time is " + time)
+        
+    # To get information from wikipedia python library
+    elif 'who is' in user_Command:
+        search_Object = user_Command.replace("who is", "")
+        object_Information = wikipedia.summary(search_Object, 1)
+        print(object_Information)
+        Response_Voice(object_Information)
+        
+    # To update upgrade and autoremove the system
+    elif "system" in user_Command:
+        system_Command = user_Command.replace("system", "")
+        Response_Voice(system_Command+"ing")
+        Terminal_Command.terminal_Command(system_Command)
+        
+    else:
+        Response_Voice("Sorry, can you say it again")
+        
+while True: 
+    numa_System_Run()
+        
