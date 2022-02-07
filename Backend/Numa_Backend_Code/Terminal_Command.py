@@ -8,7 +8,7 @@ def terminal_Command(command_Type):
     elif command_Type.strip() == "upgrade":
         os.system("sudo apt upgrade")
         
-    elif command_Type.strip() == "autoremove":
+    elif command_Type.strip() == "auto remove":
         os.system("sudo apt autoremove")
     
     elif command_Type.strip() == "shutdown now":
@@ -28,6 +28,6 @@ def terminal_Command(command_Type):
         
     else:
         print("No such command exist")
-        exit()
+    
     
     

@@ -1,25 +1,37 @@
 import os
+import sys
 import subprocess
 import signal
-import Open_App
+import pyautogui
+import time
 
 def close_Application(application_Name):
     print(application_Name)
     chrome_path = "/usr/bin/google-chrome"
     
-    # To close browser
-    if application_Name.strip() == "chrome":
-        pass
+    # To close chrome
+    try:
+        if application_Name.strip() == "chrome":
+            os.system("pkill chrome")
+            
+        # To close folder
+        elif application_Name.strip() == "folder":
+            try:
+                os.close(files)
+                
+            except NameError as name_Error:
+                print("Found error", name_Error)
+                
+            except Exception as error:
+                print("There is error other than NameError in Close_App.py File." + error)
+            
         
-    # To close folder
-    elif application_Name.strip() == "folder":
-        os.kill(pid, sig)
+        # Alert message when application is not found open 
+        else:
+            print("Alert Message") # Use of Vibration 
     
-    # To Close all application
-    elif application_Name.strip() == "all application":
-        print("All applications closed")
-    
-    # Alert message when application is not found open 
-    else:
-        print("Alert Message") # Use of Vibration 
-        exit()
+    except NameError as name_Error:
+        print("Found error: ", name_Error)
+        
+    except Exception as error:
+        print ("There is error other than NameError in Close_App.py File.")

@@ -38,5 +38,4 @@ def open_Application(application_Name):
         
     else:
         print("No such file exits")
-        exit()
         
