@@ -5,6 +5,7 @@ import pyttsx3
 import pywhatkit 
 import datetime
 import wikipedia
+import threading
 
 # inbuilt function 
 import Open_App
@@ -12,6 +13,7 @@ import Close_App
 import Terminal_Command
 import numa
 import Swap_Application
+
 
 # Recognize the user command
 listener = sr.Recognizer() 
@@ -40,17 +42,17 @@ def Receive_Command():
             # Listen to the user voice from microphone using user_Command_Source
             user_Voice_Command = listener.listen(user_Command_Source)
             
-            # Google will translate the user_Voice_Command which is audio into text
+            # speech recognition model will translate the user_Voice_Command which is audio into text
             final_Command = listener.recognize_google(user_Voice_Command)
 
-            # converting to final_Command to lower case
-            final_Command = final_Command.lower()
+            # # converting to final_Command to lower case
+            # final_Command = final_Command.lower()
             
-            # To detect the word Numa 
-            if 'google' in final_Command: # if "numa" word found in command
-                final_Command = final_Command.replace('google', '')
-            else:                       # if "numa" word doesn't found in command
-                print("No wake word")
+            # # To detect the word Numa 
+            # if 'google' in final_Command: # if "numa" word found in command
+            #     final_Command = final_Command.replace('google', '')
+            # else:                       # if "numa" word doesn't found in command
+            #     print("No wake word")
                 
     except Exception as error:
         print("Exception in Receive_Command", error)
@@ -61,7 +63,6 @@ def Receive_Command():
 # Main Function that get execuated while user give command 
 def numa_System_Run():
     user_Command = Receive_Command()
-    
     try:
         # To know numa is on
         if "are you there" in user_Command:
@@ -120,7 +121,8 @@ def numa_System_Run():
     
     except Exception as error:
         Response_Voice("Command not found")
-        
-while True:
-    numa_System_Run()
+    
+# if __name__ == '__main__':
+#     while True:
+#         numa_System_Run()
         

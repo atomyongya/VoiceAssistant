@@ -8,7 +8,6 @@ from tensorflow.keras.models import load_model
 import pyttsx3
 import main_Backend
 
-
 #### SETTING UP TEXT TO SPEECH ###
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')

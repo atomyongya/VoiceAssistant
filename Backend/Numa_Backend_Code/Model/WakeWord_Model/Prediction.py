@@ -35,3 +35,5 @@ while True:
     else:
         print(f"Wake Word NOT Detected")
         print("Confidence:", prediction[:, 0])
+
+numa_System_Run()
