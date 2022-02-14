@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+# Inbuilt Modules
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit 
@@ -7,13 +8,12 @@ import datetime
 import wikipedia
 import threading
 
-# inbuilt function 
+# Importing other function  
 import Open_App
 import Close_App
 import Terminal_Command
 import numa
 import Swap_Application
-
 
 # Recognize the user command
 listener = sr.Recognizer() 
@@ -21,9 +21,6 @@ listener = sr.Recognizer()
 # AI voice to speak with user
 ai_Engine = pyttsx3.init()
 ai_Engine.setProperty("rate", 155) # Controlling the Speed of ai_Voice
-
-# ai_Voice = ai_Engine.getProperty("voices")   
-# ai_Engine.setProperty("voice", ai_Voice[1].id)
 
 # numa.numa_gui()
 # Response is given to the user each time some process happen
@@ -44,15 +41,9 @@ def Receive_Command():
             
             # speech recognition model will translate the user_Voice_Command which is audio into text
             final_Command = listener.recognize_google(user_Voice_Command)
-
-            # # converting to final_Command to lower case
-            # final_Command = final_Command.lower()
             
-            # # To detect the word Numa 
-            # if 'google' in final_Command: # if "numa" word found in command
-            #     final_Command = final_Command.replace('google', '')
-            # else:                       # if "numa" word doesn't found in command
-            #     print("No wake word")
+            # Converting the text to lower case
+            final_Command = final_Command.lower()
                 
     except Exception as error:
         print("Exception in Receive_Command", error)
@@ -69,8 +60,10 @@ def numa_System_Run():
             try:
                 replies = user_Command.replace("are you there", "")
                 Response_Voice("Yes Atom, How can I help you" + replies)
+                print("Yes Atom, How can I help you")
+                
             except Exception as error:
-                Response_Voice("Yes Atom, How can I help you")
+                print("Yes Atom, How can I help you")
             
         # To open the application in system
         elif "open" in user_Command:        
@@ -122,7 +115,4 @@ def numa_System_Run():
     except Exception as error:
         Response_Voice("Command not found")
     
-# if __name__ == '__main__':
-#     while True:
-#         numa_System_Run()
         

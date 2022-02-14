@@ -8,6 +8,7 @@ from tensorflow.keras.models import load_model
 import pyttsx3
 import main_Backend
 
+
 #### SETTING UP TEXT TO SPEECH ###
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -46,8 +47,8 @@ def prediction(y):
                 engine.endLoop()
 
             speak("Hello Atom, What can I do for you?")
-        
             main_Backend.numa_System_Run()
+            
     except Exception as error:
         print("Sorry atom, there is something wrong")
         
