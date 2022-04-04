@@ -3,29 +3,27 @@
 # Importing Inbuilt Models.
 import os
 import json
-import pyttsx3
 import librosa
 import numpy as np
 import sounddevice as sd
 import tensorflow as tf
 import speech_recognition as sr
+import playsound
+import IPython.display as ipd
+import pygame
 
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
 
 # Importing other class.
-
+# import award_Penelty
+import file_Path
+import mostly_Used_Function 
 
 """
 :var nepali_Model_Path (String) : Path of Nepali Langague Keyword detection model. 
 :var english_Model_Path (String) : Path of English Language keyword detection model.
 """
-
-listener =  sr.Recognizer()
-
-# AI voice to speak with user
-ai_Engine = pyttsx3.init()
-ai_Engine.setProperty("rate", 155) # Controlling the Speed of ai_Voice
 
 # Model Path
 nepali_Model_Path = ""
@@ -44,11 +42,6 @@ class Numa_VoiceAssistant():
         """
         
         self.model = model_Path
-        
-    # Response is given to the user each time some process happen
-    def response_Voice(self,ai_Engine, replies_Sentence):
-        ai_Engine.say(replies_Sentence)
-        ai_Engine.runAndWait()
     
     ######################
     def crossponding_Word(self):
@@ -80,10 +73,8 @@ class Numa_VoiceAssistant():
         
         fps = 44100
         duration = 1
-        filename = "prediction.wav"
+        filename = "user_Audio/prediction.wav"
 
-        print("Prediction Started: ")
-        
         """
         :var myrecording :  Audio to predict real time user voice.
         :var prediction :  Prediction of real time audio voice.
@@ -120,25 +111,6 @@ class Numa_VoiceAssistant():
         return predicted_keyword
     
     ######################
-    def receive_Command(self, user_Command):
-        """
-        Listening to the user command.
-        """
-        
-        try:
-            final_Command = None
-            
-            with sr.Microphone() as user_Command_Source:
-                # Alert message when "Numa" is ready.
-                if "numa" in user_Command:
-                    # Activated Replie Numa Voice Assistant.
-                    replies = "Yes Atom, How can I help you"
-                    self.response_Voice(ai_Engine, replies) 
-            
-        except Exception as error:
-            print(error)
-    
-    ######################
     def main(self):
         """
         main method to execute program.
@@ -159,25 +131,28 @@ class Numa_VoiceAssistant():
             predicted_keyword = self.prediction()
             print(predicted_keyword)
             
-            if predicted_keyword.count(wake_Word) > 0:
-                """
-                Condition to check the count of wake word is greater then zero to take next command of user.
+            mostly_Used_Function.award()
+            print("end")
+            
+            # if predicted_keyword.count(wake_Word) > 0:
+            #     """
+            #     Condition to check the count of wake word is greater then zero to take next command of user.
                 
                 
-                """
+            #     """
                 
-                try:       
-                    predicted_keyword = self.prediction()
-                    user_Command = predicted_keyword
-                    print(user_Command)
+            #     try:       
+            #         predicted_keyword = self.prediction()
+            #         user_Command = predicted_keyword
+            #         print(user_Command)
                     
-                    self.receive_Command(predicted_keyword)
+            #         self.response_Voice("Hello Atom, How can I help you?")
                     
-                except Exception as error:
-                    print(error)
-
-        
-        
+            #     except Exception as error:
+            #         print(error)
+                    
+                    
+                
     
 
 """
