@@ -1,23 +1,25 @@
-# Importing Library
+"""Open Application Sub System """
+
+# Importing inbuilt Library.
 import os 
 import sys
 import subprocess
 import webbrowser
 
-# Importing file_Path python file which contain all the path and directory to run the system.
+# Importing necessary class and function/method.
 import file_Path
+import mostly_Used_Function
 
 class Open_Application():
-    
     """
     Open_Application class is the subsystem to open application of Linux system.
     """
     
     def __init__(self, application_Name):
         """
-        Constructore function.
+        Constructor function.
         
-        :param application_Name : Name of the application.
+        :param application_Name (str): Name of the application open.
         """
         
         self.application_Name = application_Name
@@ -33,7 +35,7 @@ class Open_Application():
             """
             
             # Chrome 
-            if self.application_Name.strip() == "chrome":
+            if self.application_Name.strip() == "chrome" or self.application_Name.strip() == "google":
                 webbrowser.get(file_Path.chrome_Path).open("https://google.com")
                 
             # Folder
@@ -46,9 +48,9 @@ class Open_Application():
             elif self.application_Name.strip() == "youtube":
                 webbrowser.get(file_Path.chrome_Path).open("https://youtube.com")
                 
-            # When application name not found
+            # When application name not found give warning output.
             else:
-                print("No such file exits.")
+                mostly_Used_Function.produce_Voice(self.application_Name + " is does not exists.")
         
         except Exception as error:
-            print("Error")
+            mostly_Used_Function.produce_Voice(self.application_Name + " is does not exists. Also, contain error.")

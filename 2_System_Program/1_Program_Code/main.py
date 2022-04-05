@@ -3,20 +3,21 @@
 # Importing Inbuilt Models.
 import os
 import json
+import pygame
 import librosa
 import numpy as np
 import sounddevice as sd
 import tensorflow as tf
 import speech_recognition as sr
-import pygame
-
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
 
-# Importing other class.
-# import award_Penelty
+# Importing other file.
 import file_Path
 import mostly_Used_Function 
+
+# Importing class.
+import open_Application
 
 """
 :var nepali_Model_Path (String) : Path of Nepali Langague Keyword detection model. 
@@ -138,22 +139,52 @@ class Numa_VoiceAssistant():
                     """
                     Condition to check the count of wake word is greater then zero to take next command of user.
                     
-                    
+                    :var count (int) : To keep track of below while loop.
                     """
+                    
+                    # Open GUI 
+                    
                     
                     mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
                     count = 1
                     
                     try: 
-                        while True:  
+                        while True:
+                            """
+                            Loop to get the user main command that will execute some program.
+                            
+                            :var user_Command (str) : predicted_keyword.
+                            """  
+                            
+                            # Stoting the value value of predicted_keyword in user_Command variable.
                             predicted_keyword = self.prediction()
                             user_Command = predicted_keyword
                             print(user_Command)
 
+                            # Appending the user predicted_keyword/user_Command in list_Of_Word list.
                             list_Of_Word.append(user_Command)
                             count = count + 1
-                            if count == 3:
+                            
+                            user_Command = "open chrome"
+                            # Condition to break loop after 4 iteration or 4 second because each record time is 1 second. 
+                            if count == 4:
+                                """
+                                Program execuation code.
+                                """
+                                
                                 print(list_Of_Word)
+                                
+                                # To open an application of system.
+                                if "open" in user_Command:
+                                    application_Name = user_Command.replace("open", "")
+                                    mostly_Used_Function.produce_Voice("Opeaning " + application_Name)
+                                    open_Application_Object = open_Application.Open_Application(application_Name)
+                                    open_Application_Object.open_Application()
+                                    
+                                
+                                    
+                                
+                                # Breaking the loop after the execuation of the program.
                                 break
                             
                             

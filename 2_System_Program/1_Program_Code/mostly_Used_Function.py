@@ -1,11 +1,21 @@
 """
 This file hold mostly used class and function of the system.
+Function Name: 
+
+(1) produce_Voice()
+(2) play_Audio()
+(3) award()
+(4) make_Directory()
+(5) save_Awarded_Audio()
+(6) display_Multiple_Application()
 """
 
 # Importing Important Library
 import os
+import time
 import pyttsx3
 import pygame
+import pyautogui
 
 # Importing other function and library 
 import file_Path
@@ -66,7 +76,7 @@ def make_Directory():
 
 ###################################
 """
-(3) Save the awarded audio file.
+(5) save_Awarded_Audio function, save the awarded audio file.
 """
 
 def save_Awarded_Audio():
@@ -135,6 +145,15 @@ def save_Awarded_Audio():
         else:
             continue
         
+###################################
+"""
+(6) show_Multiple_Application function, show all the window open. 
+"""
+
+def display_Multiple_Application():
+    pyautogui.keyDown("win")
+    time.sleep(1)
+    pyautogui.keyUp("win")
     
 ###################################
 """
@@ -144,3 +163,5 @@ Function call if necessary.
 # make_Directory()
 
 # save_Awarded_Audio()
+
+# display_Multiple_Application()

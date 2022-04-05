@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os
-
+import pyautogui
 # os.system("sudo apt update\nsudo apt upgrade\nsudo apt autoremove")
 
 
