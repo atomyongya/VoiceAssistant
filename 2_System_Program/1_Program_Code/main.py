@@ -8,8 +8,6 @@ import numpy as np
 import sounddevice as sd
 import tensorflow as tf
 import speech_recognition as sr
-import playsound
-import IPython.display as ipd
 import pygame
 
 from scipy.io.wavfile import write 
@@ -34,14 +32,16 @@ class Numa_VoiceAssistant():
     Numa_VoiceAssistant class.
     """
     
-    def __init__(self, model_Path):
+    def __init__(self, model_Path, list_Of_Word):
         """
         __init__ is a Constructor method.
         
         :param model_Path (String) : Path of Nepali or English Language Keyword detection model. 
+        :param list_Of_Word (list) : List to store the multiple user predicted word to form a commond.
         """
         
         self.model = model_Path
+        self.list_Of_Word = list_Of_Word
     
     ######################
     def crossponding_Word(self):
@@ -129,39 +129,49 @@ class Numa_VoiceAssistant():
             """
             
             predicted_keyword = self.prediction()
-            print(predicted_keyword)
-            
-            mostly_Used_Function.award()
-            print("end")
-            
-            # if predicted_keyword.count(wake_Word) > 0:
-            #     """
-            #     Condition to check the count of wake word is greater then zero to take next command of user.
-                
-                
-            #     """
-                
-            #     try:       
-            #         predicted_keyword = self.prediction()
-            #         user_Command = predicted_keyword
-            #         print(user_Command)
-                    
-            #         self.response_Voice("Hello Atom, How can I help you?")
-                    
-            #     except Exception as error:
-            #         print(error)
-                    
-                    
-                
-    
 
+            if predicted_keyword == wake_Word:
+                print(predicted_keyword)
+                # mostly_Used_Function.award()
+                
+                if predicted_keyword.count(wake_Word) > 0:
+                    """
+                    Condition to check the count of wake word is greater then zero to take next command of user.
+                    
+                    
+                    """
+                    
+                    mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
+                    count = 1
+                    
+                    try: 
+                        while True:  
+                            predicted_keyword = self.prediction()
+                            user_Command = predicted_keyword
+                            print(user_Command)
+
+                            list_Of_Word.append(user_Command)
+                            count = count + 1
+                            if count == 3:
+                                print(list_Of_Word)
+                                break
+                            
+                            
+                    except Exception as error:
+                        print(error)
+                        
+                    list_Of_Word.clear()
+        
+            else:
+                continue 
 """
 Creating object of class "Numa_VoiceAssistant" for english language keyword detection. 
 
 :var english_Object : Object of Numa_VoiceAssistant.
 """
 
-english_Object = Numa_VoiceAssistant(english_Model_Path)
+list_Of_Word = []
+english_Object = Numa_VoiceAssistant(english_Model_Path, list_Of_Word)
 english_Object.main()
 
 
