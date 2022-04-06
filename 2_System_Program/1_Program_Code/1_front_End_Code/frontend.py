@@ -19,10 +19,15 @@ Creating the widgets/window of our system.
 :var y_axis (float) : Center of computer screen vertically.
 """
 
+background_Color1 = "#1f273e"
+background_Color2 = "#636af9"
+
 # Declearing Root Widgets.
 root = Tk()
 root.title("Numa")
-root.config(bg="#1f273e")
+root.config(bg=background_Color1, highlightbackground=background_Color2, borderwidth=0, highlightthickness=2, relief=RAISED)
+
+
 
 # Insitilizing the width and height of application.
 app_Width = 500
@@ -69,8 +74,10 @@ class Numa_GUI():
         :var close_Button : Button widgets to close the application.
         """
         
+        
+        
         # Creating a frame for title bar.
-        title_Bar = Frame(self.master, width=500, bg="#636af9", relief="raised")
+        title_Bar = Frame(self.master, width=500, bg=background_Color2, relief="raised")
         title_Bar.grid(row=0, column=0, sticky="ew")
         title_Bar.grid_rowconfigure(0, weight=1)
         title_Bar.grid_columnconfigure(0, weight=1)
@@ -86,17 +93,15 @@ class Numa_GUI():
         icon_Label.bind("<B1-Motion>", self.move_Application)
         
         # Adding the lable inside title_Bar frame.
-        title_Name = Label(title_Bar, text="Numa", bg="#636af9", foreground="white", font=20)
+        title_Name = Label(title_Bar, text="Numa", bg=background_Color2, foreground="white", font=20)
         title_Name.grid(row=0, column=0, padx=30, pady=3, sticky=W)
         title_Name.bind("<B1-Motion>", self.move_Application)
         
         # Creating close button for title bar.
-        close_Button = Button(title_Bar, text="X", font=20, bg="#636af9", fg="white", command=self.master.quit, relief="raised", borderwidth=0, highlightthickness=0)
+        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.master.quit, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, sticky="es")
         
-        # Creating main body of an application.
-        main_Body = LabelFrame(self.master, bg="#1f273e" ,width=480, height=550, relief="raised", borderwidth=0, highlightbackground="#636af9", highlightthickness=2)
-        main_Body.grid(pady=10)
+       
         
           
         
@@ -107,6 +112,9 @@ class Numa_GUI():
         self.master.overrideredirect(True)
         self.master.grid_columnconfigure(0, weight=1)
         self.fake_Title_Bar()
+        # Creating main body of an application.
+        main_Body = LabelFrame(self.master, bg=background_Color1, width=480, height=550, relief="raised", borderwidth=0)
+        main_Body.grid(pady=10)
 
         
 gui_Object = Numa_GUI(root)
