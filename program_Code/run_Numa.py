@@ -4,7 +4,7 @@ Code to execute the program.
 
 # Importing other class and function/method.
 from front_End_Code import gui_Object
-from backend_Code import english_Object
+import main 
 
 class Run_Numa():
     """
@@ -24,4 +24,6 @@ class Run_Numa():
         
         pass
 
-gui_Object.numa_gui()
+# gui_Object.numa_gui()
+object_English = main.english_Object
+object_English.main()

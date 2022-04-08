@@ -1,7 +1,7 @@
 """ Frontend of Numa """
 
 # Importing Inbuilt Module/Library.
-# import threading
+import threading
 
 from tkinter import *
 from PIL import ImageTk, Image
@@ -10,8 +10,8 @@ from PIL import ImageTk, Image
 import pyautogui
 
 # Importing other class and function/method
-from backend_Code import file_Path
-from backend_Code import main
+import file_Path
+import main
 
 """
 Creating the widgets/window of our system.
@@ -151,8 +151,8 @@ class Numa_GUI():
                     
                     print("Nepali Langague")
                     # user_Input_Voice()
-                    object_Nepali = main.english_Object
-                    object_Nepali.backend_Threading()
+                    # object_Nepali = main.english_Object
+                    # object_Nepali.backend_Threading()
                     # try:
                     #     object_Nepali = main.english_Object
                     #     thread_Nepali= threading.Thread(target=object_Nepali.main)
@@ -169,8 +169,8 @@ class Numa_GUI():
                     """
                     print("English Langague")
                     
-                    object_English = main.english_Object
-                    object_English.backend_Threading()
+                    # object_English = main.english_Object
+                    # object_English.backend_Threading()
                     # try:
                     #     object_English = main.english_Object
                     #     thread_English= threading.Thread(target=object_English.main)
@@ -219,7 +219,7 @@ class Numa_GUI():
         self.drop_Down_Menu(main_Body)
         
         # Run the loop to display unitl user stop program.
-        root.mainloop()
+        self.master.mainloop()
         
     # def frontend_Threading(self):
     #     frontend_Thread = threading.Thread(target=self.numa_gui)
@@ -234,4 +234,5 @@ Creating an object of clas Numa_GUI.
 """
 
 gui_Object = Numa_GUI(root)
+
 
