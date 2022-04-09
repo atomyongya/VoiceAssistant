@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 # Importing Inbuilt Models.
-import threading
 import time
 import os
 import json
@@ -13,6 +12,9 @@ import tensorflow as tf
 import speech_recognition as sr
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
+from threading import Thread, Lock
+from queue import Queue
+
 
 # Importing other file.
 import file_Path, mostly_Used_Function 
@@ -62,7 +64,7 @@ class Numa_VoiceAssistant():
         return data 
         
     ######################
-    def prediction(self):        
+    def prediction(self, queue_Thread_Prediction):        
         """
         Prediction method to predict the word from the user in real time.
 
@@ -104,7 +106,9 @@ class Numa_VoiceAssistant():
             # Finding max prediction value and mapping with the index of mapping_Data from json. 
             predicted_index = np.argmax(prediction)
             predicted_keyword = mapping_Data[predicted_index]
-            return predicted_keyword
+            
+            queue_Thread_Prediction.put(predicted_keyword)
+            queue_Thread_Prediction.task_done()
             
         except Exception as error:
             print("Error in prediction class.", error)
@@ -119,6 +123,10 @@ class Numa_VoiceAssistant():
         """
         
         try:
+            gui_Object = frontend.gui_Object
+            run_Once = 0
+            
+                    
             print("Say Wake Word: ")
             wake_Word = "numa"
             
@@ -128,11 +136,15 @@ class Numa_VoiceAssistant():
                 
                 :var predicted_keyword (String): Output/Prediction of our model.
                 """
+                # predicted_keyword = self.prediction()
+                queue_Thread_Prediction = Queue()
                 
-                predicted_keyword = self.prediction()
-
-                # threading.Thread(target=self.prediction).start
+                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,))
+                thread_Prediction.start()
                 
+                
+                predicted_keyword = queue_Thread_Prediction.get()
+                # predicted_keyword = "No"
                 print(predicted_keyword)
                 
                 if predicted_keyword == wake_Word:
@@ -148,12 +160,23 @@ class Numa_VoiceAssistant():
                         """
                         count = 1
                         mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
+                        # run_Once = 0
+                        # if count == 0:
+                        #     try:
+                        #         gui_Object.numa_gui()
+                            
+                        #     except Exception as error:
+                        #         print("Gui Error", error)
                         
-                        gui_Object = frontend.gui_Object 
-                        gui_Object.numa_gui()
+                        # else:
+                        #     continue
+                        
+                         
                         
                         try: 
                             while True:
+                                print("Inside of Inside...")
+                                
                                 """
                                 Loop to get the user main command that will execute some program.
                                 
@@ -161,7 +184,10 @@ class Numa_VoiceAssistant():
                                 """  
                                 
                                 # Stoting the value value of predicted_keyword in user_Command variable.
-                                predicted_keyword = self.prediction()
+                                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,))
+                                thread_Prediction.start()
+                                
+                                predicted_keyword = queue_Thread_Prediction.get()
                                 user_Command = predicted_keyword
                                 print("Inside: ",user_Command)
 
@@ -191,7 +217,12 @@ class Numa_VoiceAssistant():
                                 
                         except Exception as error:
                             print("Error from class main and function main: First exception eror", error)
-                            
+                        
+                        # gui_Object = frontend.gui_Object 
+                        # gui_Object.minimize_Application() 
+                        # thread_Prediction.daemon = True
+                        # thread_Prediction.join()
+                        
                         list_Of_Word.clear()
             
                 else:

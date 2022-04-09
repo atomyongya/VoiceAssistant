@@ -106,3 +106,16 @@
         #     except Exception as error:
         #         print(error)
         #         continue
+        
+        
+            # user_Input_Voice()
+                    # object_Nepali = main.english_Object
+                    # object_Nepali.backend_Threading()
+                    # try:
+                    #     object_Nepali = main.english_Object
+                    #     thread_Nepali= threading.Thread(target=object_Nepali.main)
+                    #     thread_Nepali.start()
+                    #     time.sleep(1)
+                        
+                    # except Exception as error:
+                    #     print("Exception from frontend : thread_Nepali")

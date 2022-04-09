@@ -1,12 +1,12 @@
 """ Frontend of Numa """
 
 # Importing Inbuilt Module/Library.
-import threading
+from threading import Thread
 
 from tkinter import *
 from PIL import ImageTk, Image
 
-# import time
+import time
 import pyautogui
 
 # Importing other class and function/method
@@ -73,7 +73,19 @@ class Numa_GUI():
            
         self.master.geometry(f"+{event.x_root}+{event.y_root}")    
     
-    
+    def minimize_Application(self):
+        """
+        
+        """
+        self.master.withdraw()
+        
+    def display_After_Minimize(self):
+        """
+        
+        """
+
+        self.master.deiconify()
+        
     def fake_Title_Bar(self):
         """
         fake_Title_Bar method, to create beautiful title bar.
@@ -106,14 +118,14 @@ class Numa_GUI():
         title_Name.grid(row=0, column=0, padx=30, pady=3, sticky=W)
         title_Name.bind("<B1-Motion>", self.move_Application)
         
+        # Adding minimize button.
+        minimize_Button = Button(title_Bar, text="-", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
+        minimize_Button.grid(row=0, sticky="es")
+        
         # Creating close button for title bar.
         close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.master.destroy, relief=SUNKEN, borderwidth=0, highlightthickness=0)
-        close_Button.grid(row=0, sticky="es")
-        
-        
- 
-        
-    
+        close_Button.grid(row=0, column=1, sticky="es")
+     
     def drop_Down_Menu(self, main_Body):
         """
         drop_Down_menu, contain the list of Language.
@@ -149,19 +161,12 @@ class Numa_GUI():
                     
                     """
                     
+                    time.sleep(0.1)
                     print("Nepali Langague")
-                    # user_Input_Voice()
-                    # object_Nepali = main.english_Object
-                    # object_Nepali.backend_Threading()
-                    # try:
-                    #     object_Nepali = main.english_Object
-                    #     thread_Nepali= threading.Thread(target=object_Nepali.main)
-                    #     thread_Nepali.start()
-                    #     time.sleep(1)
-                        
-                    # except Exception as error:
-                    #     print("Exception from frontend : thread_Nepali")
-                
+                    backend_Object_Nepali = main.english_Object
+                    backend_Object_Nepali.main()
+                    # thread_Backend = Thread(target=backend_Object_Nepali.main()).start
+
                 elif selected_Language == "English":
                     """
                     selected langage equal to English Language (Call object of english_Object)
@@ -169,17 +174,6 @@ class Numa_GUI():
                     """
                     print("English Langague")
                     
-                    # object_English = main.english_Object
-                    # object_English.backend_Threading()
-                    # try:
-                    #     object_English = main.english_Object
-                    #     thread_English= threading.Thread(target=object_English.main)
-                    #     thread_English.start()
-                    #     time.sleep(1)
-                        
-                    # except Exception as error:
-                    #     print("Exception from frontend : thread_English")
-                        
                 else:
                     print("No langauge Selected.")
                     
@@ -189,11 +183,11 @@ class Numa_GUI():
         
         language_Option = ["Nepali", "English"]
         
-        select_Language = StringVar(value="Nepali")
+        select_Language = StringVar()
         select_Language.set("Nepali")
         
         # Creating DropMenu widgets.
-        drop_down_menu = OptionMenu(main_Body, select_Language, *language_Option, command=language_After_Selection)
+        drop_down_menu = OptionMenu(main_Body, select_Language, *language_Option, command=Thread(target=language_After_Selection, args=(select_Language,)).start())
         drop_down_menu.grid(row=0, column=0)
         drop_down_menu.config(width=10)
         
@@ -220,12 +214,6 @@ class Numa_GUI():
         
         # Run the loop to display unitl user stop program.
         self.master.mainloop()
-        
-    # def frontend_Threading(self):
-    #     frontend_Thread = threading.Thread(target=self.numa_gui)
-    #     frontend_Thread.start()
-    #     frontend_Thread.join() 
-
 
 """
 Creating an object of clas Numa_GUI.

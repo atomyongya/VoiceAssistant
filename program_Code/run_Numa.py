@@ -24,6 +24,8 @@ class Run_Numa():
         
         pass
 
-# gui_Object.numa_gui()
-object_English = main.english_Object
-object_English.main()
+gui_Object.numa_gui()
+
+# object_English = main.english_Object
+# object_English.main()
+
