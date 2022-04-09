@@ -1,5 +1,6 @@
 """
 This file hold mostly used class and function of the system.
+
 Function Name: 
 
 (1) produce_Voice()
@@ -8,6 +9,7 @@ Function Name:
 (4) make_Directory()
 (5) save_Awarded_Audio()
 (6) display_Multiple_Application()
+(7) kill_Running_Thread()
 """
 
 # Importing Important Library
@@ -15,7 +17,10 @@ import os
 import time
 import pyttsx3
 import pygame
+import signal
 from playsound import playsound
+from threading import Thread, current_thread, Event
+
 
 # Importing other function and library 
 import file_Path
@@ -162,6 +167,14 @@ def display_Multiple_Application():
      
 ###################################
 """
+(7) kill_Running_Thread function, Kill the running thread.
+"""
+
+def kill_Running_Thread():
+    
+    print("Current Thrad: {}".format(current_thread().name))
+###################################
+"""
 Function call if necessary.
 """
 
@@ -170,3 +183,5 @@ Function call if necessary.
 # save_Awarded_Audio()
 
 # display_Multiple_Application()
+
+kill_Running_Thread()

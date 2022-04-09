@@ -1,10 +1,10 @@
 """ Frontend of Numa """
 
 # Importing Inbuilt Module/Library.
-from threading import Thread
-
 from tkinter import *
 from PIL import ImageTk, Image
+from threading import Thread, Lock, current_thread
+from queue import Queue
 
 import time
 import pyautogui
@@ -63,6 +63,8 @@ class Numa_GUI():
         """
         
         self.master = master    
+        # self.select_Language = StringVar(value="Nepali")
+        # self.selected_Language = None
                         
     def move_Application(self, event):
         """
@@ -123,7 +125,7 @@ class Numa_GUI():
         minimize_Button.grid(row=0, sticky="es")
         
         # Creating close button for title bar.
-        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.master.destroy, relief=SUNKEN, borderwidth=0, highlightthickness=0)
+        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, column=1, sticky="es")
      
     def drop_Down_Menu(self, main_Body):
@@ -155,7 +157,7 @@ class Numa_GUI():
             try:
                 selected_Language = select_Language.get()
                 
-                if selected_Language == "Nepali":
+                if selected_Language == "Nepali" or selected_Language == None:
                     """cl
                     selected_Language equal to Nepali Language (Call object of nepali_Object)
                     
@@ -163,33 +165,46 @@ class Numa_GUI():
                     
                     time.sleep(0.1)
                     print("Nepali Langague")
-                    backend_Object_Nepali = main.english_Object
-                    backend_Object_Nepali.main()
-                    # thread_Backend = Thread(target=backend_Object_Nepali.main()).start
-
+                    backend_Object_Nepali = main.nepali_Object
+                    thread_Backend_Nepali = Thread(target=backend_Object_Nepali.main()).start()
+                    thread_Backend_Nepali.join()
+                    
                 elif selected_Language == "English":
                     """
                     selected langage equal to English Language (Call object of english_Object)
                     
                     """
+                    time.sleep(0.1)
                     print("English Langague")
+                    backend_Object_English = main.english_Object
+                    thread_Backend_English = Thread(target=backend_Object_English.main()).start()
+                    thread_Backend_English.join()
+                    
                     
                 else:
                     print("No langauge Selected.")
                     
+                # return self.selected_Language
+                    
             except Exception as error:
                 print("Error in class frontend and Function language_After_Selection.", error)
-                
         
+        def run_Language_Selection(select_language):
+            run_Language = Thread(target=language_After_Selection, args=(select_Language,) ).start()
+            
+        
+        # Variable 
         language_Option = ["Nepali", "English"]
         
         select_Language = StringVar()
         select_Language.set("Nepali")
-        
+            
         # Creating DropMenu widgets.
-        drop_down_menu = OptionMenu(main_Body, select_Language, *language_Option, command=Thread(target=language_After_Selection, args=(select_Language,)).start())
+        drop_down_menu = OptionMenu(main_Body, select_Language, *language_Option, command=run_Language_Selection)
         drop_down_menu.grid(row=0, column=0)
         drop_down_menu.config(width=10)
+        
+        print(select_Language.get())
         
         
     def numa_gui(self):

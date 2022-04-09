@@ -12,7 +12,7 @@ import tensorflow as tf
 import speech_recognition as sr
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
-from threading import Thread, Lock
+from threading import Thread, Lock, current_thread
 from queue import Queue
 
 
@@ -23,15 +23,6 @@ import file_Path, mostly_Used_Function
 # Importing class.
 import open_Application
 from front_End_Code import frontend
-
-"""
-:var nepali_Model_Path (String) : Path of Nepali Langague Keyword detection model. 
-:var english_Model_Path (String) : Path of English Language keyword detection model.
-"""
-
-# Model Path
-nepali_Model_Path = ""
-english_Model_Path = load_model("/home/atomyongya/Documents/Herald/Final Year Project/VoiceAssistant(Numa)/VoiceAssistant/_system_Model/2_English_KM/3_English_Model_File/english_Model.h5")
 
 class Numa_VoiceAssistant():
     """
@@ -64,7 +55,7 @@ class Numa_VoiceAssistant():
         return data 
         
     ######################
-    def prediction(self, queue_Thread_Prediction):        
+    def prediction(self, queue_Thread_Prediction, lock_Thread_Prediction):        
         """
         Prediction method to predict the word from the user in real time.
 
@@ -74,46 +65,48 @@ class Numa_VoiceAssistant():
         :param mapping_Data : Loding the data to compare with our real time audio.
         """
         
-        data = self.crossponding_Word()
-        mapping_Data = data["mappings"]
+        with lock_Thread_Prediction:
+            data = self.crossponding_Word()
+            mapping_Data = data["mappings"]
+            
+            fps = 44100
+            duration = 1
+            filename = "user_Audio/prediction.wav"
+            
+            """
+            :var myrecording :  Audio to predict real time user voice.
+            :var prediction :  Prediction of real time audio voice.
+            :var predicted_index : Hold the max prediction value of our model.
+            :var predicted_keyword : Text word with which our voice will get compared. 
+            """
+            print("Current thread: {}".format(current_thread().name))
+            
+            try:
+                # Real time audio recording.  
+                myrecording = sd.rec(int(duration * fps), samplerate=fps, channels=2)
+                sd.wait()
+                write(filename, fps, myrecording)
+                
+                # Loading the recorded file using librosa.
+                signal, sample_rate = librosa.load(filename)
+                
+                # Extracting the MFCC feature of an audio
+                mfcc = librosa.feature.mfcc(signal, sample_rate, n_mfcc=13, hop_length=512, n_fft=2048)
+                
+                # Making prediction and comparing our audio mfcc with the mfcc of train audio data
+                prediction = self.model.predict(tf.expand_dims(mfcc.T, axis=0))
+                
+                # Finding max prediction value and mapping with the index of mapping_Data from json. 
+                predicted_index = np.argmax(prediction)
+                predicted_keyword = mapping_Data[predicted_index]
+                
+                queue_Thread_Prediction.put(predicted_keyword)
+                # queue_Thread_Prediction.task_done()
+                
+            except Exception as error:
+                print("Error in prediction class.", error)
         
-        fps = 44100
-        duration = 1
-        filename = "user_Audio/prediction.wav"
-        
-        """
-        :var myrecording :  Audio to predict real time user voice.
-        :var prediction :  Prediction of real time audio voice.
-        :var predicted_index : Hold the max prediction value of our model.
-        :var predicted_keyword : Text word with which our voice will get compared. 
-        """
-        
-        try:
-            # Real time audio recording.  
-            myrecording = sd.rec(int(duration * fps), samplerate=fps, channels=2)
-            sd.wait()
-            write(filename, fps, myrecording)
-            
-            # Loading the recorded file using librosa.
-            signal, sample_rate = librosa.load(filename)
-            
-            # Extracting the MFCC feature of an audio
-            mfcc = librosa.feature.mfcc(signal, sample_rate, n_mfcc=13, hop_length=512, n_fft=2048)
-            
-            # Making prediction and comparing our audio mfcc with the mfcc of train audio data
-            prediction = english_Model_Path.predict(tf.expand_dims(mfcc.T, axis=0))
-            
-            # Finding max prediction value and mapping with the index of mapping_Data from json. 
-            predicted_index = np.argmax(prediction)
-            predicted_keyword = mapping_Data[predicted_index]
-            
-            queue_Thread_Prediction.put(predicted_keyword)
-            queue_Thread_Prediction.task_done()
-            
-        except Exception as error:
-            print("Error in prediction class.", error)
 
-            
     ######################
     def main(self):
         """
@@ -123,9 +116,8 @@ class Numa_VoiceAssistant():
         """
         
         try:
-            gui_Object = frontend.gui_Object
             run_Once = 0
-            
+            # print("Current thread: {}".format(current_thread().name))
                     
             print("Say Wake Word: ")
             wake_Word = "numa"
@@ -136,21 +128,26 @@ class Numa_VoiceAssistant():
                 
                 :var predicted_keyword (String): Output/Prediction of our model.
                 """
-                # predicted_keyword = self.prediction()
                 queue_Thread_Prediction = Queue()
+                lock_Thread_Prediction = Lock()
                 
-                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,))
+                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,lock_Thread_Prediction))
                 thread_Prediction.start()
+                thread_Prediction.join()
                 
+                thread_Prediction.deamon = True
+                print("{}".format(thread_Prediction.is_alive()))
                 
                 predicted_keyword = queue_Thread_Prediction.get()
                 # predicted_keyword = "No"
-                print(predicted_keyword)
+                print("Wake Word: ", predicted_keyword)
+                predicted_keyword = "numa"
                 
                 if predicted_keyword == wake_Word:
                     
                     print("Inside....")
-                   
+
+                    mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
                     
                     if predicted_keyword.count(wake_Word) > 0:
                         """
@@ -159,19 +156,6 @@ class Numa_VoiceAssistant():
                         :var count (int) : To keep track of below while loop.
                         """
                         count = 1
-                        mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
-                        # run_Once = 0
-                        # if count == 0:
-                        #     try:
-                        #         gui_Object.numa_gui()
-                            
-                        #     except Exception as error:
-                        #         print("Gui Error", error)
-                        
-                        # else:
-                        #     continue
-                        
-                         
                         
                         try: 
                             while True:
@@ -184,16 +168,20 @@ class Numa_VoiceAssistant():
                                 """  
                                 
                                 # Stoting the value value of predicted_keyword in user_Command variable.
-                                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,))
-                                thread_Prediction.start()
+                                thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
+                                thread_Prediction1.start()
                                 
                                 predicted_keyword = queue_Thread_Prediction.get()
                                 user_Command = predicted_keyword
                                 print("Inside: ",user_Command)
+                                thread_Prediction.deamon = True
+                                
+                                # print("{}".format(thread_Prediction1.is_alive()))
 
                                 # Appending the user predicted_keyword/user_Command in list_Of_Word list.
                                 list_Of_Word.append(user_Command)
                                 count = count + 1
+                                queue_Thread_Prediction.task_done()
                                 
                                 # user_Command = "open chrome"
                                 # Condition to break loop after 4 iteration or 4 second because each record time is 1 second. 
@@ -211,9 +199,11 @@ class Numa_VoiceAssistant():
                                         open_Application_Object = open_Application.Open_Application(application_Name)
                                         open_Application_Object.open_Application()
                                     
+                                    
                                     # Breaking the loop after the execuation of the program.
                                     break
-                                
+                                    # queue_Thread_Prediction.task_done()
+                                    
                                 
                         except Exception as error:
                             print("Error from class main and function main: First exception eror", error)
@@ -238,7 +228,9 @@ Creating object of class "Numa_VoiceAssistant" for english language keyword dete
 """
 
 list_Of_Word = []
-english_Object = Numa_VoiceAssistant(english_Model_Path, list_Of_Word)
+english_Object = Numa_VoiceAssistant(file_Path.english_Model_Path, list_Of_Word)
+
+nepali_Object = Numa_VoiceAssistant(file_Path.english_Model_Path, list_Of_Word)
 
 # Use if and else if nepali langague if you want to declear nepali object.
 
