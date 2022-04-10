@@ -3,8 +3,7 @@
 # Importing Inbuilt Module/Library.
 from tkinter import *
 from PIL import ImageTk, Image
-# from threading import Thread, Lock, current_thread
-from multiprocessing import Process
+from threading import Thread, Lock, current_thread
 from queue import Queue
 
 import time
@@ -167,11 +166,8 @@ class Numa_GUI():
                     time.sleep(0.1)
                     print("Nepali Langague")
                     backend_Object_Nepali = main.nepali_Object
-                    # thread_Backend_Nepali = Thread(target=backend_Object_Nepali.main()).start()
-                    # thread_Backend_Nepali.join()
-                    process_Backend_Nepali = Process(target=backend_Object_Nepali.main)
-                    process_Backend_Nepali.start()
-                    process_Backend_Nepali.join()
+                    thread_Backend_Nepali = Thread(target=backend_Object_Nepali.main()).start()
+                    thread_Backend_Nepali.join()
                     
                 elif selected_Language == "English":
                     """
@@ -181,11 +177,8 @@ class Numa_GUI():
                     time.sleep(0.1)
                     print("English Langague")
                     backend_Object_English = main.english_Object
-                    # thread_Backend_English = Thread(target=backend_Object_English.main()).start()
-                    # thread_Backend_English.join()
-                    process_Backend_English = Process(target=backend_Object_English.main)
-                    process_Backend_English.start()
-                    process_Backend_English.join()
+                    thread_Backend_English = Thread(target=backend_Object_English.main()).start()
+                    thread_Backend_English.join()
                     
                 else:
                     print("No langauge Selected.")
@@ -197,9 +190,8 @@ class Numa_GUI():
         
         def run_Language_Selection(select_language):
             time.sleep(0.1)
-            # run_Language = Thread(target=language_After_Selection, args=(select_Language,) ).start()
-            process_Run_Language = Process(target=language_After_Selection, args=[select_Language])
-            process_Run_Language.start()
+            run_Language = Thread(target=language_After_Selection, args=(select_Language,) ).start()
+       
             
         # Variable 
         language_Option = ["Nepali", "English"]
