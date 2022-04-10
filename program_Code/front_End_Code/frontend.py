@@ -47,6 +47,8 @@ screen_Height = root.winfo_screenheight()
 x_axis = (screen_Width/2) - (app_Width/2)
 y_axis = (screen_Height/2) - (app_Height/2)
 
+is_Default = True
+
 # Declearing the with and height of the application and position of application when open.
 root.geometry(f"{app_Width}x{app_Height}+{int(x_axis)}+{int(y_axis)}")
 
@@ -63,7 +65,6 @@ class Numa_GUI():
         """
         
         self.master = master    
-        # self.select_Language = StringVar(value="Nepali")
         # self.selected_Language = None
                         
     def move_Application(self, event):
@@ -128,6 +129,24 @@ class Numa_GUI():
         close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, column=1, sticky="es")
      
+    def change_Language(self, label_Language_Info):
+        
+        global is_Default
+        
+        if is_Default:
+            select_Language = "English"
+            label_Language_Info.config(text=select_Language)
+            print(select_Language)
+            is_Default = False
+            
+        else:
+            select_Language = "Nepali"
+            label_Language_Info.config(text=select_Language)
+            print(select_Language)
+            is_Default = True
+            
+        return select_Language
+        
     def drop_Down_Menu(self, main_Body):
         """
         drop_Down_menu, contain the list of Language.
@@ -139,73 +158,45 @@ class Numa_GUI():
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
         
-        def user_Input_Voice():
-            """
-            
-            """
-            
-            user_Input_Label = Label(main_Body, text="Output", width=20, height=2)
-            user_Input_Label.grid(row=2)
-
+        label_Language_Info = Label(main_Body, text="Nepali")
+        label_Language_Info.grid(row=0, column=0, padx=2, pady=2)
         
-        def language_After_Selection(select_language):
-            """output_Label = Label(main_Body, text=selected)
-                output_Labele.grid()
-            
-            """
-            
-            try:
-                selected_Language = select_Language.get()
-                
-                if selected_Language == "Nepali" or selected_Language == None:
-                    """cl
-                    selected_Language equal to Nepali Language (Call object of nepali_Object)
-                    
-                    """
-                    
-                    time.sleep(0.1)
-                    print("Nepali Langague")
-                    backend_Object_Nepali = main.nepali_Object
-                    thread_Backend_Nepali = Thread(target=backend_Object_Nepali.main()).start()
-                    thread_Backend_Nepali.join()
-                    
-                elif selected_Language == "English":
-                    """
-                    selected langage equal to English Language (Call object of english_Object)
-                    
-                    """
-                    time.sleep(0.1)
-                    print("English Langague")
-                    backend_Object_English = main.english_Object
-                    thread_Backend_English = Thread(target=backend_Object_English.main()).start()
-                    thread_Backend_English.join()
-                    
-                else:
-                    print("No langauge Selected.")
-                    
-                # return self.selected_Language
-                    
-            except Exception as error:
-                print("Error in class frontend and Function language_After_Selection.", error)
+        # button = Button(main_Body, text="Change", command=lambda: self.change_Language(label_Language_Info))
+        # button.grid(row=1, column=0, padx=2, pady=2)
         
-        def run_Language_Selection(select_language):
-            time.sleep(0.1)
-            run_Language = Thread(target=language_After_Selection, args=(select_Language,) ).start()
-       
+        options = ["Nepali", "English"]
+        language_Option = StringVar()
+        language_Option.set("Nepali")
+        
+        drop_down_menu = OptionMenu(main_Body, language_Option, *options, command=lambda x=None: self.change_Language(label_Language_Info))
+        drop_down_menu.grid(row=1, column=0)
+        
+        # default_language = "Nepali"
+        # if is_Default:
+        #     backend_Nepali_Object = main.english_Object
+        #     thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+        #     thread_Backend_Nepali.start()
+        #     print("Nepali Stopped")
             
-        # Variable 
-        language_Option = ["Nepali", "English"]
-        
-        select_Language = StringVar()
-        select_Language.set("Nepali")
+        # elif is_Default == False:
+        #     print("English")
+        #     thread_Backend_Nepali.daemon = True
             
-        # Creating DropMenu widgets.
-        drop_down_menu = OptionMenu(main_Body, select_Language, *language_Option, command=run_Language_Selection)
-        drop_down_menu.grid(row=0, column=0)
-        drop_down_menu.config(width=10)
-        
-        print(select_Language.get())
-        
+        #     backend_English_Object = main.english_Object
+        #     thread_Backend_English = Thread(target=backend_English_Object.main)
+        #     thread_Backend_English.daemon = True
+        #     thread_Backend_English.start()
+        #     print("English Stopped")
+            
+            
+        # else:
+        #     print("Default Nepali")
+        #     backend_Nepali_Object = main.english_Object
+        #     thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+        #     thread_Backend_Nepali.daemon = True
+        #     thread_Backend_Nepali.start()
+        #     print("Nepali Stopped")
+            
         
     def numa_gui(self):
         """

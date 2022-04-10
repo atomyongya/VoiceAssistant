@@ -121,6 +121,7 @@ class Numa_VoiceAssistant():
                     
             print("Say Wake Word: ")
             wake_Word = "numa"
+            count_Outside = 0
             
             while True:
                 """
@@ -139,10 +140,14 @@ class Numa_VoiceAssistant():
                 print("{}".format(thread_Prediction.is_alive()))
                 
                 predicted_keyword = queue_Thread_Prediction.get()
-                # predicted_keyword = "No"
-                print("Wake Word: ", predicted_keyword)
-                predicted_keyword = "numa"
                 
+                if count_Outside < 5:
+                    predicted_keyword = "No"
+                else:
+                    predicted_keyword = "numa"
+                    count_Outside = 0
+                
+                count_Outside = count_Outside + 1
                 if predicted_keyword == wake_Word:
                     
                     print("Inside....")
