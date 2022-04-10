@@ -12,7 +12,8 @@ import tensorflow as tf
 import speech_recognition as sr
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
-from threading import Thread, Lock, current_thread
+# from threading import Thread, Lock, current_thread
+from multiprocessing import Process, Lock
 from queue import Queue
 
 
@@ -79,7 +80,7 @@ class Numa_VoiceAssistant():
             :var predicted_index : Hold the max prediction value of our model.
             :var predicted_keyword : Text word with which our voice will get compared. 
             """
-            print("Current thread: {}".format(current_thread().name))
+            # print("Current thread: {}".format(current_thread().name))
             
             try:
                 # Real time audio recording.  
@@ -131,12 +132,15 @@ class Numa_VoiceAssistant():
                 queue_Thread_Prediction = Queue()
                 lock_Thread_Prediction = Lock()
                 
-                thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,lock_Thread_Prediction))
-                thread_Prediction.start()
-                thread_Prediction.join()
+                # thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,lock_Thread_Prediction))
+                # thread_Prediction.start()
+                # thread_Prediction.join()
+                process_Prediction = Process(target=self.prediction, args=[queue_Thread_Prediction, lock_Thread_Prediction])
+                process_Prediction.start()
+                process_Prediction.join()
                 
-                thread_Prediction.deamon = True
-                print("{}".format(thread_Prediction.is_alive()))
+                # thread_Prediction.deamon = True
+                # print("{}".format(thread_Prediction.is_alive()))
                 
                 predicted_keyword = queue_Thread_Prediction.get()
                 # predicted_keyword = "No"
@@ -168,13 +172,14 @@ class Numa_VoiceAssistant():
                                 """  
                                 
                                 # Stoting the value value of predicted_keyword in user_Command variable.
-                                thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
-                                thread_Prediction1.start()
+                                # thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
+                                # thread_Prediction1.start()
+                                process_Prediction1 = Process(target=self.prediction, args=[queue_Thread_Prediction, lock_Thread_Prediction])
                                 
                                 predicted_keyword = queue_Thread_Prediction.get()
                                 user_Command = predicted_keyword
                                 print("Inside: ",user_Command)
-                                thread_Prediction.deamon = True
+                                # thread_Prediction.deamon = True
                                 
                                 # print("{}".format(thread_Prediction1.is_alive()))
 
