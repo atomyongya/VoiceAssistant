@@ -27,6 +27,7 @@ Creating the widgets/window of our system.
 
 background_Color1 = "#1f273e"
 background_Color2 = "#636af9"
+background_Color3 = "#655edd"
 
 # Declearing Root Widgets.
 root = Tk()
@@ -52,7 +53,7 @@ is_Default = True
 # Declearing the with and height of the application and position of application when open.
 root.geometry(f"{app_Width}x{app_Height}+{int(x_axis)}+{int(y_axis)}")
 
-class Numa_GUI():
+class Numa_GUI(object):
     """
     Graphical User Interface of "Numa" Voice Assistant.
     """
@@ -146,6 +147,12 @@ class Numa_GUI():
             is_Default = True
             
         return select_Language
+    
+    
+    def get_Output_Word(self, output_Word):
+        backend_Object = main.english_Object
+        word = backend_Object.output_Word
+        print(word)
         
     def drop_Down_Menu(self, main_Body):
         """
@@ -157,45 +164,51 @@ class Numa_GUI():
         :var selected_language : Function that helps to manage the value of widget.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-        
-        label_Language_Info = Label(main_Body, text="Nepali")
-        label_Language_Info.grid(row=0, column=0, padx=2, pady=2)
-        
-        # button = Button(main_Body, text="Change", command=lambda: self.change_Language(label_Language_Info))
-        # button.grid(row=1, column=0, padx=2, pady=2)
+
+        entry_Input_Command = Entry(main_Body, fg="black")
+        entry_Input_Command.grid(padx=1, pady=20)
         
         options = ["Nepali", "English"]
         language_Option = StringVar()
         language_Option.set("Nepali")
         
         drop_down_menu = OptionMenu(main_Body, language_Option, *options, command=lambda x=None: self.change_Language(label_Language_Info))
-        drop_down_menu.grid(row=1, column=0)
+        drop_down_menu.grid(row=0, column=0, padx=5, pady= 2, sticky="w")
+        drop_down_menu.config(background=background_Color3, foreground="white", borderwidth=0, highlightbackground=background_Color3)
         
-        # default_language = "Nepali"
-        # if is_Default:
-        #     backend_Nepali_Object = main.english_Object
-        #     thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
-        #     thread_Backend_Nepali.start()
-        #     print("Nepali Stopped")
+        # Animation or image
+        
+        backend_Object = main.english_Object
+        
+        label_Language_Info = Label(main_Body, text=backend_Object.list_Of_Word, width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
+        label_Language_Info.grid(padx=2, pady=40)
+        
+       
+        
+        default_language = "Nepali"
+        if is_Default:
+            backend_Nepali_Object = main.english_Object
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+            thread_Backend_Nepali.start()
+            print("Nepali Stopped")
             
-        # elif is_Default == False:
-        #     print("English")
-        #     thread_Backend_Nepali.daemon = True
+        elif is_Default == False:
+            print("English")
             
-        #     backend_English_Object = main.english_Object
-        #     thread_Backend_English = Thread(target=backend_English_Object.main)
-        #     thread_Backend_English.daemon = True
-        #     thread_Backend_English.start()
-        #     print("English Stopped")
+            backend_English_Object = main.english_Object
+            thread_Backend_English = Thread(target=backend_English_Object.main)
+            thread_Backend_English.daemon = True
+            thread_Backend_English.start()
+            print("English Stopped")
             
             
-        # else:
-        #     print("Default Nepali")
-        #     backend_Nepali_Object = main.english_Object
-        #     thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
-        #     thread_Backend_Nepali.daemon = True
-        #     thread_Backend_Nepali.start()
-        #     print("Nepali Stopped")
+        else:
+            print("Default Nepali")
+            backend_Nepali_Object = main.english_Object
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+            thread_Backend_Nepali.daemon = True
+            thread_Backend_Nepali.start()
+            print("Nepali Stopped")
             
         
     def numa_gui(self):
@@ -212,8 +225,10 @@ class Numa_GUI():
         
         # Creating main body of an application.
         main_Body = Frame(self.master, bg="red", width=480, height=550, relief="raised", borderwidth=0)
-        main_Body.grid(padx=3, pady=10, sticky="ewns", rowspan=5, columnspan=5)
- 
+        main_Body.grid(padx=3, pady=3, sticky="nsew")
+        main_Body.grid_columnconfigure(0, weight=1)
+        main_Body.grid_rowconfigure(0, weight=1)
+        
         
         # calling drop_Down_Menu function.
         self.drop_Down_Menu(main_Body)

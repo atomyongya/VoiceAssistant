@@ -24,7 +24,9 @@ import file_Path, mostly_Used_Function
 import open_Application
 from front_End_Code import frontend
 
-class Numa_VoiceAssistant():
+list_Of_Word = []
+
+class Numa_VoiceAssistant(object):
     """
     Numa_VoiceAssistant class.
     """
@@ -106,7 +108,10 @@ class Numa_VoiceAssistant():
             except Exception as error:
                 print("Error in prediction class.", error)
         
-
+    def list_Of_Word_Pass(self, user_Command):
+        list_Of_Word = list_Of_Word.append(user_Command)
+        
+    
     ######################
     def main(self):
         """
@@ -118,7 +123,9 @@ class Numa_VoiceAssistant():
         try:
             run_Once = 0
             # print("Current thread: {}".format(current_thread().name))
-                    
+            
+            gui_object = frontend.gui_Object
+            
             print("Say Wake Word: ")
             wake_Word = "numa"
             count_Outside = 0
@@ -135,13 +142,13 @@ class Numa_VoiceAssistant():
                 thread_Prediction = Thread(target=self.prediction, args=(queue_Thread_Prediction,lock_Thread_Prediction))
                 thread_Prediction.start()
                 thread_Prediction.join()
-                
                 thread_Prediction.deamon = True
+                
                 print("{}".format(thread_Prediction.is_alive()))
                 
                 predicted_keyword = queue_Thread_Prediction.get()
                 
-                if count_Outside < 5:
+                if count_Outside < 2:
                     predicted_keyword = "No"
                 else:
                     predicted_keyword = "numa"
@@ -151,6 +158,8 @@ class Numa_VoiceAssistant():
                 if predicted_keyword == wake_Word:
                     
                     print("Inside....")
+                    
+                    gui_object.display_After_Minimize()
 
                     mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
                     
@@ -176,15 +185,17 @@ class Numa_VoiceAssistant():
                                 thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
                                 thread_Prediction1.start()
                                 
+                                
                                 predicted_keyword = queue_Thread_Prediction.get()
                                 user_Command = predicted_keyword
                                 print("Inside: ",user_Command)
-                                # thread_Prediction.deamon = True
                                 
-                                # print("{}".format(thread_Prediction1.is_alive()))
-
+                                # label_Object = frontend.gui_Object
+                                # label_Object.get_Output_Word(user_Command)
+                                
                                 # Appending the user predicted_keyword/user_Command in list_Of_Word list.
-                                list_Of_Word.append(user_Command)
+                                self.list_Of_Word.append(user_Command)
+                                
                                 count = count + 1
                                 queue_Thread_Prediction.task_done()
                                 
@@ -195,7 +206,7 @@ class Numa_VoiceAssistant():
                                     Program execuation code.
                                     """
                                     
-                                    print(list_Of_Word)
+                                    print(self.list_Of_Word)
                                     
                                     # To open an application of system.
                                     if "open" in user_Command:
@@ -213,18 +224,24 @@ class Numa_VoiceAssistant():
                         except Exception as error:
                             print("Error from class main and function main: First exception eror", error)
                         
-                        # gui_Object = frontend.gui_Object 
-                        # gui_Object.minimize_Application() 
-                        # thread_Prediction.daemon = True
-                        # thread_Prediction.join()
                         
-                        list_Of_Word.clear()
+                        
+                        # thread_Prediction.join()
+                        self.list_Of_Word.clear()
             
                 else:
                     continue 
                 
+                thread_Prediction1.join()
+                thread_Prediction1.daemon = True
+                print("{}".format(thread_Prediction.is_alive()))
+                
         except Exception as error:
             print("Error in class main and Function main: Second exception error", error)
+            
+    # def pass_Output_Frontent(self):
+    #     list_Of_Word = self.main()
+    #     print(user_Command)
             
 """
 Creating object of class "Numa_VoiceAssistant" for english language keyword detection. 
@@ -232,7 +249,6 @@ Creating object of class "Numa_VoiceAssistant" for english language keyword dete
 :var english_Object : Object of Numa_VoiceAssistant.
 """
 
-list_Of_Word = []
 english_Object = Numa_VoiceAssistant(file_Path.english_Model_Path, list_Of_Word)
 
 nepali_Object = Numa_VoiceAssistant(file_Path.english_Model_Path, list_Of_Word)
