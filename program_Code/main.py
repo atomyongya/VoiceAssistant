@@ -108,12 +108,12 @@ class Numa_VoiceAssistant(object):
             except Exception as error:
                 print("Error in prediction class.", error)
         
-    def list_Of_Word_Pass(self, user_Command):
-        list_Of_Word = list_Of_Word.append(user_Command)
+    # def list_Of_Word_Pass(self, user_Command):
+    #     list_Of_Word = list_Of_Word.append(user_Command)
         
     
     ######################
-    def main(self):
+    def main(self, label_Language_Info):
         """
         main method to execute program.
         
@@ -183,18 +183,20 @@ class Numa_VoiceAssistant(object):
                                 
                                 # Stoting the value value of predicted_keyword in user_Command variable.
                                 thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
+                                thread_Prediction1.setDaemon(True)
+                                print("{}".format(thread_Prediction.is_alive()))
                                 thread_Prediction1.start()
-                                
+                                thread_Prediction1.join()
                                 
                                 predicted_keyword = queue_Thread_Prediction.get()
                                 user_Command = predicted_keyword
                                 print("Inside: ",user_Command)
                                 
-                                # label_Object = frontend.gui_Object
-                                # label_Object.get_Output_Word(user_Command)
+                                
                                 
                                 # Appending the user predicted_keyword/user_Command in list_Of_Word list.
                                 self.list_Of_Word.append(user_Command)
+                                label_Language_Info.config(text=list_Of_Word)
                                 
                                 count = count + 1
                                 queue_Thread_Prediction.task_done()
@@ -220,7 +222,6 @@ class Numa_VoiceAssistant(object):
                                     break
                                     # queue_Thread_Prediction.task_done()
                                     
-                                
                         except Exception as error:
                             print("Error from class main and function main: First exception eror", error)
                         
@@ -232,9 +233,7 @@ class Numa_VoiceAssistant(object):
                 else:
                     continue 
                 
-                thread_Prediction1.join()
-                thread_Prediction1.daemon = True
-                print("{}".format(thread_Prediction.is_alive()))
+                
                 
         except Exception as error:
             print("Error in class main and Function main: Second exception error", error)

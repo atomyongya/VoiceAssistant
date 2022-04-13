@@ -149,10 +149,9 @@ class Numa_GUI(object):
         return select_Language
     
     
-    def get_Output_Word(self, output_Word):
-        backend_Object = main.english_Object
-        word = backend_Object.output_Word
-        print(word)
+    # def get_Output_Word(self, predicted_Word):
+    #     label_Language_Info.config()
+    #     return word
         
     def drop_Down_Menu(self, main_Body):
         """
@@ -164,7 +163,8 @@ class Numa_GUI(object):
         :var selected_language : Function that helps to manage the value of widget.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-
+        
+        
         entry_Input_Command = Entry(main_Body, fg="black")
         entry_Input_Command.grid(padx=1, pady=20)
         
@@ -180,7 +180,7 @@ class Numa_GUI(object):
         
         backend_Object = main.english_Object
         
-        label_Language_Info = Label(main_Body, text=backend_Object.list_Of_Word, width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
+        label_Language_Info = Label(main_Body, text="", width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
         label_Language_Info.grid(padx=2, pady=40)
         
        
@@ -188,7 +188,7 @@ class Numa_GUI(object):
         default_language = "Nepali"
         if is_Default:
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info,))
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
             
@@ -196,7 +196,7 @@ class Numa_GUI(object):
             print("English")
             
             backend_English_Object = main.english_Object
-            thread_Backend_English = Thread(target=backend_English_Object.main)
+            thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info,))
             thread_Backend_English.daemon = True
             thread_Backend_English.start()
             print("English Stopped")
@@ -205,7 +205,7 @@ class Numa_GUI(object):
         else:
             print("Default Nepali")
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main)
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info))
             thread_Backend_Nepali.daemon = True
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
