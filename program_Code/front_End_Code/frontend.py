@@ -1,17 +1,17 @@
 """ Frontend of Numa """
 
 # Importing Inbuilt Module/Library.
+import time
+import pyautogui
+
 from tkinter import *
 from PIL import ImageTk, Image
 from threading import Thread, Lock, current_thread
 from queue import Queue
 
-import time
-import pyautogui
-
 # Importing other class and function/method
-import file_Path
 import main
+import file_Path
 
 """
 Creating the widgets/window of our system.
@@ -25,6 +25,7 @@ Creating the widgets/window of our system.
 :var y_axis (float) : Center of computer screen vertically.
 """
 
+# Color used as a backend for GUI of application.
 background_Color1 = "#1f273e"
 background_Color2 = "#636af9"
 background_Color3 = "#655edd"
@@ -33,8 +34,6 @@ background_Color3 = "#655edd"
 root = Tk()
 root.title("Numa")
 root.config(bg=background_Color1, highlightbackground=background_Color2, borderwidth=0, highlightthickness=2, relief=RAISED)
-
-
 
 # Insitilizing the width and height of application.
 app_Width = 500
@@ -66,7 +65,6 @@ class Numa_GUI(object):
         """
         
         self.master = master    
-        # self.selected_Language = None
                         
     def move_Application(self, event):
         """
@@ -79,13 +77,14 @@ class Numa_GUI(object):
     
     def minimize_Application(self):
         """
-        
+        minimize_Application method, to minimize the application.
         """
+        
         self.master.withdraw()
         
-    def display_After_Minimize(self):
+    def display_After_Minimize_Close(self):
         """
-        
+        display_After_Minimize_Close method, to reopen application.
         """
 
         self.master.deiconify()
@@ -95,10 +94,10 @@ class Numa_GUI(object):
         fake_Title_Bar method, to create beautiful title bar.
         
         :var title_Bar : Frame widgets act as the title bar for our system GUI.
-        :var icon_Path (str) : Path of image icon.
         :var load_Icon : Opeaning/Loading image from icon_Path folder.
         :var icon_Label : Label widget to display image.
         :var title_Name : Label widgets that contain the title name of our system.
+        :var minimize_Button : Button widget to minimize the application.
         :var close_Button : Button widgets to close the application.
         """
         
@@ -130,28 +129,29 @@ class Numa_GUI(object):
         close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, column=1, sticky="es")
      
-    def change_Language(self, label_Language_Info):
+    def change_Language(self):
+        """
+        change_Language method is called when there is change in language from drop_Down_Menu method.
+        
+        :var is_Default (Boolean) : It is helps us to switch between Nepali and English langauge.
+        :var select_Language (str) : Selected Language.  
+        """
         
         global is_Default
         
+        # For Default value and Nepali Language
         if is_Default:
-            select_Language = "English"
-            label_Language_Info.config(text=select_Language)
+            select_Language = "Nepali"
             print(select_Language)
             is_Default = False
             
+        # For English Language
         else:
-            select_Language = "Nepali"
-            label_Language_Info.config(text=select_Language)
+            select_Language = "English"
             print(select_Language)
             is_Default = True
             
         return select_Language
-    
-    
-    # def get_Output_Word(self, predicted_Word):
-    #     label_Language_Info.config()
-    #     return word
         
     def drop_Down_Menu(self, main_Body):
         """
@@ -159,32 +159,32 @@ class Numa_GUI(object):
 
         :param main_Body : Frame where OptionMenu widgets will be put.
         
-        :var language_Option (list) : List which contain language option.
-        :var selected_language : Function that helps to manage the value of widget.
+        :var options (list) : List which contain language option.
+        :var language_Option : Selected language in dropdown menu.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-        
-        
+
+        # Keybord input from user.
         entry_Input_Command = Entry(main_Body, fg="black")
         entry_Input_Command.grid(padx=1, pady=20)
         
+        # Options for language selection.
         options = ["Nepali", "English"]
         language_Option = StringVar()
         language_Option.set("Nepali")
         
-        drop_down_menu = OptionMenu(main_Body, language_Option, *options, command=lambda x=None: self.change_Language(label_Language_Info))
+        # Creating Drop Down Meu.
+        drop_down_menu = OptionMenu(main_Body, language_Option, *options, command=lambda x=None: self.change_Language())
         drop_down_menu.grid(row=0, column=0, padx=5, pady= 2, sticky="w")
         drop_down_menu.config(background=background_Color3, foreground="white", borderwidth=0, highlightbackground=background_Color3)
         
         # Animation or image
         
-        backend_Object = main.english_Object
-        
+        # Creating label widget where the user command will be displayed.
         label_Language_Info = Label(main_Body, text="", width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
         label_Language_Info.grid(padx=2, pady=40)
         
-       
-        
+        # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
         if is_Default:
             backend_Nepali_Object = main.english_Object
@@ -194,19 +194,17 @@ class Numa_GUI(object):
             
         elif is_Default == False:
             print("English")
-            
             backend_English_Object = main.english_Object
             thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info,))
-            thread_Backend_English.daemon = True
+            # thread_Backend_English.daemon = True
             thread_Backend_English.start()
             print("English Stopped")
-            
             
         else:
             print("Default Nepali")
             backend_Nepali_Object = main.english_Object
             thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info))
-            thread_Backend_Nepali.daemon = True
+            # thread_Backend_Nepali.daemon = True
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
             
@@ -218,9 +216,13 @@ class Numa_GUI(object):
         :var main_Body : Frame that hold the main sub widgets of application. 
         """
         
-        self.master.overrideredirect(True) # Removing the default title bar.
+        # Removing the default title bar.
+        self.master.overrideredirect(True) 
+        
+        # Configuring column gird to take space of 1.
         self.master.grid_columnconfigure(0, weight=1)
         
+        # Calling method fake_Title_Bar.
         self.fake_Title_Bar()
         
         # Creating main body of an application.
@@ -228,7 +230,6 @@ class Numa_GUI(object):
         main_Body.grid(padx=3, pady=3, sticky="nsew")
         main_Body.grid_columnconfigure(0, weight=1)
         main_Body.grid_rowconfigure(0, weight=1)
-        
         
         # calling drop_Down_Menu function.
         self.drop_Down_Menu(main_Body)

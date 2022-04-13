@@ -16,6 +16,9 @@ wake_Word_Sound_Effect = "user_Audio/wake_Word_Sound_Effect/wake_Word_Sound_Effe
 
 icon_Path = "image/icon.png"
 
+
+english_Json_Path = "/home/atomyongya/Documents/Herald/Final Year Project/VoiceAssistant(Numa)/VoiceAssistant/_system_Model/2_English_KM/2_English_Json_Output_File/English_Data_JSON.json"
+
 """
 :var nepali_Model_Path (String) : Path of Nepali Langague Keyword detection model. 
 :var english_Model_Path (String) : Path of English Language keyword detection model.
