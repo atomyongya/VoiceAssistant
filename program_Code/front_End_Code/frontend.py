@@ -12,6 +12,7 @@ from queue import Queue
 # Importing other class and function/method
 import main
 import file_Path
+from front_End_Code import audio_Animation
 
 """
 Creating the widgets/window of our system.
@@ -126,7 +127,7 @@ class Numa_GUI(object):
         minimize_Button.grid(row=0, sticky="es")
         
         # Creating close button for title bar.
-        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
+        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.master.quit, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, column=1, sticky="es")
      
     def change_Language(self):
@@ -152,6 +153,8 @@ class Numa_GUI(object):
             is_Default = True
             
         return select_Language
+    
+  
         
     def drop_Down_Menu(self, main_Body):
         """
@@ -163,10 +166,6 @@ class Numa_GUI(object):
         :var language_Option : Selected language in dropdown menu.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-
-        # Keybord input from user.
-        entry_Input_Command = Entry(main_Body, fg="black")
-        entry_Input_Command.grid(padx=1, pady=20)
         
         # Options for language selection.
         options = ["Nepali", "English"]
@@ -178,11 +177,19 @@ class Numa_GUI(object):
         drop_down_menu.grid(row=0, column=0, padx=5, pady= 2, sticky="w")
         drop_down_menu.config(background=background_Color3, foreground="white", borderwidth=0, highlightbackground=background_Color3)
         
-        # Animation or image
+        # Creating Object of Audio_Animation class and calling method audio_Input_Animation.
+        canvas_Audio_Animation = Canvas(main_Body, width=250, height=150, background="white")
+        canvas_Audio_Animation.grid()
+        
+        audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, 5, 10, 10, 2, "orange" )
+        audio_Animation_Object.audio_Input_Animation()
+        
+        
         
         # Creating label widget where the user command will be displayed.
-        label_Language_Info = Label(main_Body, text="", width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
+        label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white")
         label_Language_Info.grid(padx=2, pady=40)
+        
         
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
@@ -226,7 +233,7 @@ class Numa_GUI(object):
         self.fake_Title_Bar()
         
         # Creating main body of an application.
-        main_Body = Frame(self.master, bg="red", width=480, height=550, relief="raised", borderwidth=0)
+        main_Body = Frame(self.master, bg=background_Color1, width=480, height=550, relief="raised", borderwidth=0)
         main_Body.grid(padx=3, pady=3, sticky="nsew")
         main_Body.grid_columnconfigure(0, weight=1)
         main_Body.grid_rowconfigure(0, weight=1)

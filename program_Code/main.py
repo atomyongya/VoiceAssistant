@@ -201,7 +201,7 @@ class Numa_VoiceAssistant(object):
                                 self.list_Of_Word.append(user_Command)
                                 
                                 # Displaying output in GUI of Application.
-                                label_Language_Info.config(text=list_Of_Word)
+                                label_Language_Info.config(text=list_Of_Word, font=(20))
                                 
                                 count = count + 1
                                 queue_Thread_Prediction.task_done()
