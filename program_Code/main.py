@@ -71,7 +71,7 @@ class Numa_VoiceAssistant(object):
         :var mapping_Data : Mapping Data to map with user voice.
         """
         
-        with lock_Thread_Prediction:
+        with lock_Thread_Prediction:            
             data = self.crossponding_Word()
             mapping_Data = data["mappings"]
             
@@ -111,7 +111,7 @@ class Numa_VoiceAssistant(object):
                 print("Error in prediction class.", error)
     
     ######################
-    def main(self, label_Language_Info):
+    def main(self, label_Language_Info, canvas):
         """
         main method to execute program.
         
@@ -185,6 +185,10 @@ class Numa_VoiceAssistant(object):
                                 :var user_Command (str) : predicted_keyword.
                                 """  
                                 
+                                thread_Animation = Thread(target=gui_object.animation_If_User_Speak, args=(canvas,))
+                                thread_Animation.setDaemon(True)
+                                thread_Animation.start()
+                                
                                 # Creating thread to predict the user command voice.
                                 thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
                                 thread_Prediction1.setDaemon(True)
@@ -201,7 +205,7 @@ class Numa_VoiceAssistant(object):
                                 self.list_Of_Word.append(user_Command)
                                 
                                 # Displaying output in GUI of Application.
-                                label_Language_Info.config(text=list_Of_Word)
+                                label_Language_Info.config(text=list_Of_Word, font=(20))
                                 
                                 count = count + 1
                                 queue_Thread_Prediction.task_done()

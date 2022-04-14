@@ -3,6 +3,7 @@
 # Importing Inbuilt Module/Library.
 import time
 import pyautogui
+import random
 
 from tkinter import *
 from PIL import ImageTk, Image
@@ -12,6 +13,7 @@ from queue import Queue
 # Importing other class and function/method
 import main
 import file_Path
+from front_End_Code import audio_Animation
 
 """
 Creating the widgets/window of our system.
@@ -64,7 +66,12 @@ class Numa_GUI(object):
         :param master : Main Widgets/Window of system which hold other sub widgets.
         """
         
-        self.master = master    
+        self.master = master  
+        self.x_Start = 5
+        self.y_Start = 220
+        self.x_End = 40
+        self.y_End = 230
+        self.color_List = ["orange", "red"]
                         
     def move_Application(self, event):
         """
@@ -126,7 +133,7 @@ class Numa_GUI(object):
         minimize_Button.grid(row=0, sticky="es")
         
         # Creating close button for title bar.
-        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.minimize_Application, relief=SUNKEN, borderwidth=0, highlightthickness=0)
+        close_Button = Button(title_Bar, text="X", font=20, bg=background_Color2, fg="white", command=self.master.quit, relief=SUNKEN, borderwidth=0, highlightthickness=0)
         close_Button.grid(row=0, column=1, sticky="es")
      
     def change_Language(self):
@@ -152,7 +159,56 @@ class Numa_GUI(object):
             is_Default = True
             
         return select_Language
+    
+ 
+                
+    def default_Animation(self, canvas_Audio_Animation):
+        """
         
+        """
+        
+        for i in range(7):
+            if i == 0:
+                audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
+                audio_Animation_Object.audio_Input_Animation()
+        
+            else:
+                audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
+                audio_Animation_Object.audio_Input_Animation()
+                
+            self.x_Start = self.x_Start + 40
+            self.x_End = self.x_End + 40
+            
+    def animation_If_User_Speak(self, canvas_Audio_Animation):
+        """
+        Random rectangle object apper when user gives command.
+        """
+        
+        x_Start = 5
+        y_Start = 200
+        x_End = 40
+        y_End = 210
+        
+        list_Rows = [4, 5, 6, 7, 8, 9, 10]
+        output_Row = random.choice(list_Rows)
+        print(output_Row)
+        list_Columns = [4, 5, 6, 7]
+        output_Column = random.choice(list_Columns)
+        print(output_Column)
+        
+        for i in range(output_Row):
+            
+            for j in range(output_Column):
+                animation_On_Speak = audio_Animation.Audio_Animation(canvas_Audio_Animation, x_Start, y_Start, x_End, y_End, self.color_List)
+                animation_On_Speak.audio_Input_Animation()
+                x_Start = x_Start + 40  
+                x_End = x_End + 40
+            time.sleep(0.001)
+            x_Start = 5
+            y_Start = y_Start - 20
+            x_End = 40
+            y_End = y_End - 20
+            
     def drop_Down_Menu(self, main_Body):
         """
         drop_Down_menu, contain the list of Language.
@@ -163,10 +219,6 @@ class Numa_GUI(object):
         :var language_Option : Selected language in dropdown menu.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-
-        # Keybord input from user.
-        entry_Input_Command = Entry(main_Body, fg="black")
-        entry_Input_Command.grid(padx=1, pady=20)
         
         # Options for language selection.
         options = ["Nepali", "English"]
@@ -177,25 +229,29 @@ class Numa_GUI(object):
         drop_down_menu = OptionMenu(main_Body, language_Option, *options, command=lambda x=None: self.change_Language())
         drop_down_menu.grid(row=0, column=0, padx=5, pady= 2, sticky="w")
         drop_down_menu.config(background=background_Color3, foreground="white", borderwidth=0, highlightbackground=background_Color3)
-        
-        # Animation or image
-        
+            
         # Creating label widget where the user command will be displayed.
-        label_Language_Info = Label(main_Body, text="", width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
-        label_Language_Info.grid(padx=2, pady=40)
+        label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white")
+        label_Language_Info.grid(padx=2, pady=60)
+        
+        # Creating Object of Audio_Animation class and calling method audio_Input_Animation.
+        
+        canvas_Audio_Animation = Canvas(main_Body, width=300, height=240, background=background_Color1, borderwidth=0, highlightthickness=0)
+        canvas_Audio_Animation.grid(pady=0) 
+        self.default_Animation(canvas_Audio_Animation)
         
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
         if is_Default:
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info,))
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info, canvas_Audio_Animation))
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
             
         elif is_Default == False:
             print("English")
             backend_English_Object = main.english_Object
-            thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info,))
+            thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info, canvas_Audio_Animation))
             # thread_Backend_English.daemon = True
             thread_Backend_English.start()
             print("English Stopped")
@@ -203,12 +259,13 @@ class Numa_GUI(object):
         else:
             print("Default Nepali")
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info))
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info, canvas_Audio_Animation))
             # thread_Backend_Nepali.daemon = True
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
             
-        
+    
+            
     def numa_gui(self):
         """
         numa_gui method that hold sub widgets.
@@ -226,7 +283,7 @@ class Numa_GUI(object):
         self.fake_Title_Bar()
         
         # Creating main body of an application.
-        main_Body = Frame(self.master, bg="red", width=480, height=550, relief="raised", borderwidth=0)
+        main_Body = Frame(self.master, bg=background_Color1, width=480, height=550, relief="raised", borderwidth=0)
         main_Body.grid(padx=3, pady=3, sticky="nsew")
         main_Body.grid_columnconfigure(0, weight=1)
         main_Body.grid_rowconfigure(0, weight=1)
