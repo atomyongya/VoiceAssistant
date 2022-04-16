@@ -145,19 +145,19 @@ class Numa_VoiceAssistant(object):
                 thread_Prediction.start()
                 thread_Prediction.join()
                 thread_Prediction.deamon = True
-                print("{}".format(thread_Prediction.is_alive()))
+                # print("{}".format(thread_Prediction.is_alive()))
                 
                 # predicted wake word.
                 predicted_keyword = queue_Thread_Prediction.get()
+                print(predicted_keyword)
                 
-                if count_Outside < 2:
-                    predicted_keyword = "No"
-                else:
-                    predicted_keyword = "numa"
-                    count_Outside = 0
+                # if count_Outside < 2:
+                #     predicted_keyword = "No"
+                # else:
+                #     predicted_keyword = "numa"
+                #     count_Outside = 0
                 
-                count_Outside = count_Outside + 1
-                
+                # count_Outside = count_Outside + 1
                 
                 if predicted_keyword == wake_Word:
                     print("Inside....")
@@ -165,7 +165,7 @@ class Numa_VoiceAssistant(object):
                     # Displaying GUI of application if "numa" is activated.
                     gui_object = frontend.gui_Object
                     gui_object.display_After_Minimize_Close()
-
+                    
                     # Sending the signal as audio to inform user that numa is ready to take command.
                     mostly_Used_Function.play_Audio(file_Path.wake_Word_Sound_Effect)
                     
@@ -192,7 +192,7 @@ class Numa_VoiceAssistant(object):
                                 # Creating thread to predict the user command voice.
                                 thread_Prediction1 = Thread(target=self.prediction, args=(queue_Thread_Prediction, lock_Thread_Prediction))
                                 thread_Prediction1.setDaemon(True)
-                                print("{}".format(thread_Prediction.is_alive()))
+                                # print("{}".format(thread_Prediction.is_alive()))
                                 thread_Prediction1.start()
                                 thread_Prediction1.join()
                                 

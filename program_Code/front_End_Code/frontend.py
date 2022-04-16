@@ -219,7 +219,11 @@ class Numa_GUI(object):
         :var language_Option : Selected language in dropdown menu.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> demo
         # Options for language selection.
         options = ["Nepali", "English"]
         language_Option = StringVar()
@@ -236,9 +240,15 @@ class Numa_GUI(object):
         
         # Creating Object of Audio_Animation class and calling method audio_Input_Animation.
         
+<<<<<<< HEAD
         canvas_Audio_Animation = Canvas(main_Body, width=300, height=240, background=background_Color1, borderwidth=0, highlightthickness=0)
         canvas_Audio_Animation.grid(pady=0) 
         self.default_Animation(canvas_Audio_Animation)
+=======
+        # Creating label widget where the user command will be displayed.
+        label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white", font=(20), borderwidth=1, highlightthickness=0, highlightcolor=background_Color1)
+        label_Language_Info.grid(padx=2, pady=80, ipady=5)
+>>>>>>> demo
         
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
