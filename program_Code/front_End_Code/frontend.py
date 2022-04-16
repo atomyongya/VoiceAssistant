@@ -180,21 +180,18 @@ class Numa_GUI(object):
         label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white", font=(20), borderwidth=1, highlightthickness=0, highlightcolor=background_Color1)
         label_Language_Info.grid(padx=2, pady=80, ipady=5)
         
-        canvas = Canvas(self.master, width=100, height=100, background="white")
-        canvas.grid()
-        
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
         if is_Default:
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info, canvas))
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info,))
             thread_Backend_Nepali.start()
             print("Nepali Stopped")
             
         elif is_Default == False:
             print("English")
             backend_English_Object = main.english_Object
-            thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info, canvas))
+            thread_Backend_English = Thread(target=backend_English_Object.main, args=(label_Language_Info,))
             # thread_Backend_English.daemon = True
             thread_Backend_English.start()
             print("English Stopped")
@@ -202,7 +199,7 @@ class Numa_GUI(object):
         else:
             print("Default Nepali")
             backend_Nepali_Object = main.english_Object
-            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info, canvas))
+            thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info))
             # thread_Backend_Nepali.daemon = True
             thread_Backend_Nepali.start()
             print("Hello")
