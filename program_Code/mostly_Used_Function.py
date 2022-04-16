@@ -119,8 +119,8 @@ def save_Awarded_Audio():
                 
                 try:
                     # move the awarded audio in there respective folder.
-                    if os.path.exists("user_Audio/prediction.wav"):
-                        os.system("mv user_Audio/prediction.wav " + "user_Audio/awarded_Audio/" + user_Selection + "/")
+                    if os.path.exists("user_Audio/clean_Audio.wav"):
+                        os.system("mv user_Audio/clean_Audio.wav " + "user_Audio/awarded_Audio/" + user_Selection + "/")
                     
                     else:
                         print("No File to move.")
@@ -131,16 +131,16 @@ def save_Awarded_Audio():
                     try:
                         if length_Selected_Folder == 1:
                             length_Selected_Folder = 1
-                            renaming_File = os.rename(f"user_Audio/awarded_Audio/{user_Selection}/prediction.wav", f"user_Audio/awarded_Audio/{user_Selection}/{length_Selected_Folder}.wav")
+                            renaming_File = os.rename(f"user_Audio/awarded_Audio/{user_Selection}/clean_Audio.wav", f"user_Audio/awarded_Audio/{user_Selection}/{length_Selected_Folder}.wav")
                             
                         else:
-                            renaming_File = os.rename(f"user_Audio/awarded_Audio/{user_Selection}/prediction.wav", f"user_Audio/awarded_Audio/{user_Selection}/{length_Selected_Folder}.wav")
+                            renaming_File = os.rename(f"user_Audio/awarded_Audio/{user_Selection}/clean_Audio.wav", f"user_Audio/awarded_Audio/{user_Selection}/{length_Selected_Folder}.wav")
                             
                     except Exception as error:
                         print("No file to rename.")
                     
                     new_Name = str(length_Selected_Folder) + ".wav"
-                    print(f"Old Name : prediction.wav\nNew Name : {new_Name}")
+                    print(f"Old Name : clean_Audio.wav\nNew Name : {new_Name}")
                     
                 except Exception as error:
                     print("File not found.")

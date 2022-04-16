@@ -13,6 +13,7 @@ import tensorflow as tf
 import speech_recognition as sr
 
 from queue import Queue
+from scipy.io import wavfile
 from scipy.io.wavfile import write 
 from tensorflow.keras.models import load_model
 from threading import Thread, Lock, current_thread
@@ -94,8 +95,11 @@ class Numa_VoiceAssistant(object):
                 sd.wait()
                 write(filename, fps, myrecording)
                 
+                # Reducing Noise
+                rate, clean_Audio_Data = wavfile.read(filename)
+                nr.reduce_noise(np.reshape(clean_Audio_Data, (2, -1)), rate)
                 
-                
+                write("user_Audio/clean_Audio.wav", fps, clean_Audio_Data)
                 # Loading the recorded file using librosa.
                 signal, sample_rate = librosa.load(filename)
                 
@@ -104,7 +108,7 @@ class Numa_VoiceAssistant(object):
                 
                 # Making prediction and comparing our audio mfcc with the mfcc of train audio data
                 prediction = self.model.predict(tf.expand_dims(mfcc.T, axis=0))
-                
+                    
                 # Finding max prediction value and mapping with the index of mapping_Data from json. 
                 predicted_index = np.argmax(prediction)
                 predicted_keyword = mapping_Data[predicted_index]
