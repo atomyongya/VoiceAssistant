@@ -164,10 +164,6 @@ class Numa_GUI(object):
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
 
-        # Keybord input from user.
-        entry_Input_Command = Entry(main_Body, fg="black")
-        entry_Input_Command.grid(padx=1, pady=20)
-        
         # Options for language selection.
         options = ["Nepali", "English"]
         language_Option = StringVar()
@@ -181,8 +177,8 @@ class Numa_GUI(object):
         # Animation or image
         
         # Creating label widget where the user command will be displayed.
-        label_Language_Info = Label(main_Body, text="", width=40, bg="white", fg="black", borderwidth=1, highlightthickness=1, highlightcolor="white")
-        label_Language_Info.grid(padx=2, pady=40)
+        label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white", font=(20), borderwidth=1, highlightthickness=0, highlightcolor=background_Color1)
+        label_Language_Info.grid(padx=2, pady=80, ipady=5)
         
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
@@ -226,7 +222,7 @@ class Numa_GUI(object):
         self.fake_Title_Bar()
         
         # Creating main body of an application.
-        main_Body = Frame(self.master, bg="red", width=480, height=550, relief="raised", borderwidth=0)
+        main_Body = Frame(self.master, bg=background_Color1, width=480, height=550, relief="raised", borderwidth=0)
         main_Body.grid(padx=3, pady=3, sticky="nsew")
         main_Body.grid_columnconfigure(0, weight=1)
         main_Body.grid_rowconfigure(0, weight=1)
