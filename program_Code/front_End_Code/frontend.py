@@ -13,7 +13,7 @@ from queue import Queue
 # Importing other class and function/method
 import main
 import file_Path
-from front_End_Code import audio_Animation
+# from front_End_Code import audio_Animation
 
 """
 Creating the widgets/window of our system.
@@ -162,22 +162,22 @@ class Numa_GUI(object):
     
  
                 
-    def default_Animation(self, canvas_Audio_Animation):
-        """
+    # def default_Animation(self, canvas_Audio_Animation):
+    #     """
         
-        """
+    #     """
         
-        for i in range(7):
-            if i == 0:
-                audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
-                audio_Animation_Object.audio_Input_Animation()
+    #     for i in range(7):
+    #         if i == 0:
+    #             audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
+    #             audio_Animation_Object.audio_Input_Animation()
         
-            else:
-                audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
-                audio_Animation_Object.audio_Input_Animation()
+    #         else:
+    #             audio_Animation_Object = audio_Animation.Audio_Animation(canvas_Audio_Animation, self.x_Start, self.y_Start, self.x_End, self.y_End, self.color_List)
+    #             audio_Animation_Object.audio_Input_Animation()
                 
-            self.x_Start = self.x_Start + 40
-            self.x_End = self.x_End + 40
+    #         self.x_Start = self.x_Start + 40
+    #         self.x_End = self.x_End + 40
             
     def animation_If_User_Speak(self, canvas_Audio_Animation):
         """
@@ -219,11 +219,7 @@ class Numa_GUI(object):
         :var language_Option : Selected language in dropdown menu.
         :var drop_down_menu : OptionMenu widget from which drop down menu will be created.
         """
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> demo
         # Options for language selection.
         options = ["Nepali", "English"]
         language_Option = StringVar()
@@ -240,15 +236,12 @@ class Numa_GUI(object):
         
         # Creating Object of Audio_Animation class and calling method audio_Input_Animation.
         
-<<<<<<< HEAD
         canvas_Audio_Animation = Canvas(main_Body, width=300, height=240, background=background_Color1, borderwidth=0, highlightthickness=0)
         canvas_Audio_Animation.grid(pady=0) 
-        self.default_Animation(canvas_Audio_Animation)
-=======
+        # self.default_Animation(canvas_Audio_Animation)
         # Creating label widget where the user command will be displayed.
         label_Language_Info = Label(main_Body, text="", width=40, bg=background_Color1, fg="white", font=(20), borderwidth=1, highlightthickness=0, highlightcolor=background_Color1)
         label_Language_Info.grid(padx=2, pady=80, ipady=5)
->>>>>>> demo
         
         # Condition to run language with the selected langauge in drop_down_menu widget.
         default_language = "Nepali"
