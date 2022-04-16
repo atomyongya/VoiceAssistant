@@ -119,7 +119,7 @@ def save_Awarded_Audio():
                 
                 try:
                     # move the awarded audio in there respective folder.
-                    if os.path.exists(user_Audio/prediction.wav):
+                    if os.path.exists("user_Audio/prediction.wav"):
                         os.system("mv user_Audio/prediction.wav " + "user_Audio/awarded_Audio/" + user_Selection + "/")
                     
                     else:
@@ -135,22 +135,22 @@ def save_Awarded_Audio():
                             
                         else:
                             renaming_File = os.rename(f"user_Audio/awarded_Audio/{user_Selection}/prediction.wav", f"user_Audio/awarded_Audio/{user_Selection}/{length_Selected_Folder}.wav")
-                    
+                            
                     except Exception as error:
                         print("No file to rename.")
                     
-                    print(f"Old Name : prediction.wav \nNew Name : {renaming_File}")
+                    new_Name = str(length_Selected_Folder) + ".wav"
+                    print(f"Old Name : prediction.wav\nNew Name : {new_Name}")
                     
                 except Exception as error:
                     print("File not found.")
                 
                 # Condition to continue or break while loop.
-                continue_File = input("Continue: ")
-                if continue_File == "n":
+                continue_File = input("Record Next Audio: ")
+                if continue_File == "y" or continue_File == "Y":
                         break
-                    
                 else:
-                    continue
+                    break
         
         else:
             continue

@@ -7,6 +7,7 @@ import json
 import pygame
 import librosa
 import numpy as np
+import noisereduce as nr
 import sounddevice as sd
 import tensorflow as tf
 import speech_recognition as sr
@@ -93,6 +94,8 @@ class Numa_VoiceAssistant(object):
                 sd.wait()
                 write(filename, fps, myrecording)
                 
+                
+                
                 # Loading the recorded file using librosa.
                 signal, sample_rate = librosa.load(filename)
                 
@@ -151,13 +154,13 @@ class Numa_VoiceAssistant(object):
                 predicted_keyword = queue_Thread_Prediction.get()
                 print(predicted_keyword)
                 
-                if count_Outside < 2:
-                    predicted_keyword = "No"
-                else:
-                    predicted_keyword = "numa"
-                    count_Outside = 0
+                # if count_Outside < 2:
+                #     predicted_keyword = "No"
+                # else:
+                #     predicted_keyword = "numa"
+                #     count_Outside = 0
                 
-                count_Outside = count_Outside + 1
+                # count_Outside = count_Outside + 1
                 
                 mostly_Used_Function.save_Awarded_Audio()
                 
