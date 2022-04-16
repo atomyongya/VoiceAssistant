@@ -202,6 +202,7 @@ class Numa_GUI(object):
             thread_Backend_Nepali = Thread(target=backend_Nepali_Object.main, args=(label_Language_Info))
             # thread_Backend_Nepali.daemon = True
             thread_Backend_Nepali.start()
+            print("Hello")
             print("Nepali Stopped")
             
         
